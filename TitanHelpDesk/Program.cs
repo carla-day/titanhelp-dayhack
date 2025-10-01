@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using TitanHelpDesk.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,6 +9,13 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 builder.Services.AddRazorPages();
 
 var app = builder.Build();
+//seed db
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    await DbSeed.SeedAsync(db);
+}
+
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
