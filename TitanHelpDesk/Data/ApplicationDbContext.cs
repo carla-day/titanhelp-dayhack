@@ -14,6 +14,7 @@ public class ApplicationDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        //store enums as strings
         modelBuilder
             .Entity<Ticket>()
             .Property(t => t.Status)
