@@ -5,7 +5,12 @@
 
 <h3>Edit Ticket</h3>
 
-@if (model is null)
+@if (notFound)
+{
+    <div class="alert alert-warning">Ticket not found.</div>
+    <NavLink class="btn btn-secondary" href="/tickets">Back</NavLink>
+}
+else if (model is null)
 {
     <p>Loading…</p>
 }
@@ -25,44 +30,48 @@ else
             <InputTextArea class="form-control" rows="5" @bind-Value="model.ProblemDescription" />
         </div>
 
-        <div class="mb-3">
-            <label class="form-label">Priority</label>
-            <InputSelect class="form-select" @bind-Value="model.Priority">
-                @foreach (var p in Enum.GetValues<PriorityLevel>())
-                {
-                    <option value="@p">@p</option>
-                }
-            </InputSelect>
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Priority</label>
+                <InputSelect class="form-select" @bind-Value="model.Priority">
+                    @foreach (var p in Enum.GetValues<PriorityLevel>())
+                    {
+                        <option value="@p">@p</option>
+                    }
+                </InputSelect>
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Status</label>
+                <InputSelect class="form-select" @bind-Value="model.Status">
+                    @foreach (var s in Enum.GetValues<TicketStatus>())
+                    {
+                        <option value="@s">@s</option>
+                    }
+                </InputSelect>
+            </div>
         </div>
 
-        <div class="mb-3">
-            <label class="form-label">Status</label>
-            <InputSelect class="form-select" @bind-Value="model.Status">
-                @foreach (var s in Enum.GetValues<TicketStatus>())
-                {
-                    <option value="@s">@s</option>
-                }
-            </InputSelect>
-        </div>
-
-        <button type="submit" class="btn btn-primary">Save</button>
-        <NavLink href="/tickets" class="btn btn-secondary ms-2">Cancel</NavLink>
+        <button type="submit" class="btn btn-primary me-2">Save</button>
+        <NavLink href="/tickets" class="btn btn-secondary">Cancel</NavLink>
     </EditForm>
 }
 
 @code {
     [Parameter] public int id { get; set; }
     private Ticket? model;
+    private bool notFound;
 
     protected override async Task OnInitializedAsync()
     {
         model = await Db.Tickets.FirstOrDefaultAsync(t => t.Id == id);
+        notFound = model is null;
     }
 
     private async Task SaveAsync()
     {
-        if (model is null) return;
-        Db.Tickets.Update(model);
+        // Ensure entity tracked or attach if needed
+        Db.Tickets.Update(model!);
         await Db.SaveChangesAsync();
         Nav.NavigateTo("/tickets");
     }
