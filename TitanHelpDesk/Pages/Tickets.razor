@@ -2,11 +2,9 @@
 @using Microsoft.EntityFrameworkCore
 @inject TitanHelpDesk.Data.ApplicationDbContext Db
 
-<h3>Tickets</h3>
+<h3>All Tickets</h3>
 
-<NavLink href="/tickets/add" class="btn btn-primary mb-3">
-    + New Ticket
-</NavLink>
+<NavLink href="/tickets/add" class="btn btn-primary mb-3">+ Add Ticket</NavLink>
 
 @if (tickets is null)
 {
@@ -26,6 +24,7 @@ else
                 <th>Date</th>
                 <th>Priority</th>
                 <th>Status</th>
+                <th style="width:160px"></th>  @* Actions *@
             </tr>
         </thead>
         <tbody>
@@ -33,10 +32,19 @@ else
             {
                 <tr>
                     <td>@t.Id</td>
-                    <td>@t.Name</td>
+                    <td><NavLink href=@($"/tickets/{t.Id}")>@t.Name</NavLink></td>
                     <td>@t.Date.ToLocalTime().ToString("g")</td>
                     <td>@t.Priority</td>
                     <td>@t.Status</td>
+                    <td>
+                        <a class="btn btn-sm btn-outline-secondary me-2"
+                           href=@($"/tickets/{t.Id}")>View</a>
+
+                        <a class="btn btn-sm btn-outline-primary"
+                           href=@($"/tickets/{t.Id}/edit")>Edit</a>
+                    </td>
+
+
                 </tr>
             }
         </tbody>
@@ -48,8 +56,6 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        tickets = await Db.Tickets
-            .OrderByDescending(t => t.Date)
-            .ToListAsync();
+        tickets = await Db.Tickets.OrderByDescending(t => t.Date).ToListAsync();
     }
 }

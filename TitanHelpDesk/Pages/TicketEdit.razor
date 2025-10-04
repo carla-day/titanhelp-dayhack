@@ -1,0 +1,78 @@
+﻿@page "/tickets/{id:int}/edit"
+@using Microsoft.EntityFrameworkCore
+@inject TitanHelpDesk.Data.ApplicationDbContext Db
+@inject NavigationManager Nav
+
+<h3>Edit Ticket</h3>
+
+@if (notFound)
+{
+    <div class="alert alert-warning">Ticket not found.</div>
+    <NavLink class="btn btn-secondary" href="/tickets">Back</NavLink>
+}
+else if (model is null)
+{
+    <p>Loading…</p>
+}
+else
+{
+    <EditForm Model="model" OnValidSubmit="SaveAsync">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <div class="mb-3">
+            <label class="form-label">Name</label>
+            <InputText class="form-control" @bind-Value="model.Name" />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Problem Description</label>
+            <InputTextArea class="form-control" rows="5" @bind-Value="model.ProblemDescription" />
+        </div>
+
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Priority</label>
+                <InputSelect class="form-select" @bind-Value="model.Priority">
+                    @foreach (var p in Enum.GetValues<PriorityLevel>())
+                    {
+                        <option value="@p">@p</option>
+                    }
+                </InputSelect>
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Status</label>
+                <InputSelect class="form-select" @bind-Value="model.Status">
+                    @foreach (var s in Enum.GetValues<TicketStatus>())
+                    {
+                        <option value="@s">@s</option>
+                    }
+                </InputSelect>
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary me-2">Save</button>
+        <NavLink href="/tickets" class="btn btn-secondary">Cancel</NavLink>
+    </EditForm>
+}
+
+@code {
+    [Parameter] public int id { get; set; }
+    private Ticket? model;
+    private bool notFound;
+
+    protected override async Task OnInitializedAsync()
+    {
+        model = await Db.Tickets.FirstOrDefaultAsync(t => t.Id == id);
+        notFound = model is null;
+    }
+
+    private async Task SaveAsync()
+    {
+        // Ensure entity tracked or attach if needed
+        Db.Tickets.Update(model!);
+        await Db.SaveChangesAsync();
+        Nav.NavigateTo("/tickets");
+    }
+}
