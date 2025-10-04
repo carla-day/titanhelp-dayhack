@@ -1,5 +1,7 @@
 ﻿@page "/tickets/add"
 @inject TitanHelpDesk.Data.ApplicationDbContext Db
+@inject NavigationManager Nav
+
 
 <h3>New Ticket</h3>
 
@@ -53,6 +55,7 @@
     {
         Db.Tickets.Add(model);
         await Db.SaveChangesAsync();
+        Nav.NavigateTo("/tickets");
 
     }
 }
