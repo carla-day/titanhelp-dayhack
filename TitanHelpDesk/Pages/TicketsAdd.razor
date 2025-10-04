@@ -1,0 +1,61 @@
+﻿@page "/tickets/add"
+@inject TitanHelpDesk.Data.ApplicationDbContext Db
+@inject NavigationManager Nav
+
+
+<h3>New Ticket</h3>
+
+<EditForm Model="model" OnValidSubmit="SaveAsync">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="mb-3">
+        <label class="form-label">Name</label>
+        <InputText class="form-control" @bind-Value="model.Name" />
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Problem Description</label>
+        <InputTextArea class="form-control" rows="5" @bind-Value="model.ProblemDescription" />
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Priority</label>
+        <InputSelect class="form-select" @bind-Value="model.Priority">
+            @foreach (var p in Enum.GetValues<PriorityLevel>())
+            {
+                <option value="@p">@p</option>
+            }
+        </InputSelect>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Status</label>
+        <InputSelect class="form-select" @bind-Value="model.Status">
+            @foreach (var s in Enum.GetValues<TicketStatus>())
+            {
+                <option value="@s">@s</option>
+            }
+        </InputSelect>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save</button>
+    <NavLink href="/tickets" class="btn btn-secondary ms-2">Cancel</NavLink>
+</EditForm>
+
+@code {
+    private Ticket model = new()
+    {
+        Date = DateTime.UtcNow,
+        Status = TicketStatus.Open,
+        Priority = PriorityLevel.Low
+    };
+
+    private async Task SaveAsync()
+    {
+        Db.Tickets.Add(model);
+        await Db.SaveChangesAsync();
+        Nav.NavigateTo("/tickets");
+
+    }
+}
