@@ -1,0 +1,55 @@
+﻿@page "/tickets"
+@using Microsoft.EntityFrameworkCore
+@inject TitanHelpDesk.Data.ApplicationDbContext Db
+
+<h3>Tickets</h3>
+
+<NavLink href="/tickets/add" class="btn btn-primary mb-3">
+    + New Ticket
+</NavLink>
+
+@if (tickets is null)
+{
+    <p>Loading…</p>
+}
+else if (tickets.Count == 0)
+{
+    <p>No tickets yet.</p>
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Date</th>
+                <th>Priority</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var t in tickets)
+            {
+                <tr>
+                    <td>@t.Id</td>
+                    <td>@t.Name</td>
+                    <td>@t.Date.ToLocalTime().ToString("g")</td>
+                    <td>@t.Priority</td>
+                    <td>@t.Status</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private List<Ticket> tickets = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        tickets = await Db.Tickets
+            .OrderByDescending(t => t.Date)
+            .ToListAsync();
+    }
+}
