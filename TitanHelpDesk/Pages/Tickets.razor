@@ -2,10 +2,10 @@
 @using Microsoft.EntityFrameworkCore
 @inject TitanHelpDesk.Data.ApplicationDbContext Db
 
-<h3>Tickets</h3>
+<h3>All Tickets</h3>
 
 <NavLink href="/tickets/add" class="btn btn-primary mb-3">
-    + New Ticket
+    + Add Ticket
 </NavLink>
 
 @if (tickets is null)
@@ -26,6 +26,7 @@ else
                 <th>Date</th>
                 <th>Priority</th>
                 <th>Status</th>
+                <th style="width:160px"></th>
             </tr>
         </thead>
         <tbody>
@@ -37,6 +38,12 @@ else
                     <td>@t.Date.ToLocalTime().ToString("g")</td>
                     <td>@t.Priority</td>
                     <td>@t.Status</td>
+                    <td>
+                        <NavLink class="btn btn-sm btn-outline-secondary me-1"
+                                 href=$"/tickets/@t.Id">View</NavLink>
+                        <NavLink class="btn btn-sm btn-outline-primary"
+                                 href=$"/tickets/@t.Id/edit">Edit</NavLink>
+                    </td>
                 </tr>
             }
         </tbody>

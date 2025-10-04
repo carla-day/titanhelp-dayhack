@@ -1,0 +1,69 @@
+﻿@page "/tickets/{id:int}/edit"
+@using Microsoft.EntityFrameworkCore
+@inject TitanHelpDesk.Data.ApplicationDbContext Db
+@inject NavigationManager Nav
+
+<h3>Edit Ticket</h3>
+
+@if (model is null)
+{
+    <p>Loading…</p>
+}
+else
+{
+    <EditForm Model="model" OnValidSubmit="SaveAsync">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <div class="mb-3">
+            <label class="form-label">Name</label>
+            <InputText class="form-control" @bind-Value="model.Name" />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Problem Description</label>
+            <InputTextArea class="form-control" rows="5" @bind-Value="model.ProblemDescription" />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Priority</label>
+            <InputSelect class="form-select" @bind-Value="model.Priority">
+                @foreach (var p in Enum.GetValues<PriorityLevel>())
+                {
+                    <option value="@p">@p</option>
+                }
+            </InputSelect>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Status</label>
+            <InputSelect class="form-select" @bind-Value="model.Status">
+                @foreach (var s in Enum.GetValues<TicketStatus>())
+                {
+                    <option value="@s">@s</option>
+                }
+            </InputSelect>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Save</button>
+        <NavLink href="/tickets" class="btn btn-secondary ms-2">Cancel</NavLink>
+    </EditForm>
+}
+
+@code {
+    [Parameter] public int id { get; set; }
+    private Ticket? model;
+
+    protected override async Task OnInitializedAsync()
+    {
+        model = await Db.Tickets.FirstOrDefaultAsync(t => t.Id == id);
+    }
+
+    private async Task SaveAsync()
+    {
+        if (model is null) return;
+        Db.Tickets.Update(model);
+        await Db.SaveChangesAsync();
+        Nav.NavigateTo("/tickets");
+    }
+}
