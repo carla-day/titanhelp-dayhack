@@ -1,9 +1,22 @@
 ﻿@page "/"
 
-<PageTitle>Index</PageTitle>
+<h2>Welcome to TitanHelp</h2>
 
-<h1>Hello, world!</h1>
+<p class="lead">
+    TitanHelp is a simple help desk ticket system. Create tickets for issues,
+    set a priority, track status, and keep a record of problems and resolutions.
+</p>
 
-Welcome to your new app.
+<div class="mt-3">
+    <NavLink href="/tickets" class="btn btn-primary me-2">View All Tickets</NavLink>
+    <NavLink href="/tickets/add" class="btn btn-success">Create a Ticket</NavLink>
+</div>
 
-<SurveyPrompt Title="How is Blazor working for you?" />
+<hr />
+
+<h5>How it works</h5>
+<ul>
+    <li><strong>Add Ticket:</strong> Provide a name, description, priority and status.</li>
+    <li><strong>All Tickets:</strong> Browse, view details, and edit existing tickets.</li>
+    <li><strong>Status:</strong> Track progress with Open / InProgress / Resolved.</li>
+</ul>

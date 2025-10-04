@@ -62,3 +62,20 @@ a, .btn-link {
     .blazor-error-boundary::after {
         content: "An error has occurred."
     }
+body {
+    background-image: url('/Images/TitanImage.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+.page {
+    background-color: rgba(255, 255, 255, 0.50);
+    backdrop-filter: blur(9px); 
+    -webkit-backdrop-filter: blur(9px);
+    padding: 2rem;
+    border-radius:  2px;
+    margin: 1rem;
+}
+
