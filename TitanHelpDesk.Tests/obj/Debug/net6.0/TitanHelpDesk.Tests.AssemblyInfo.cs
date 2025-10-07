@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("TitanHelpDesk.Tests")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ecfdcdbb71403ad25b667eb32be7b5d4b844718d")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+414566609fc7cc98a9b5e191be6ed516c8bd3d24")]
 [assembly: System.Reflection.AssemblyProductAttribute("TitanHelpDesk.Tests")]
 [assembly: System.Reflection.AssemblyTitleAttribute("TitanHelpDesk.Tests")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
