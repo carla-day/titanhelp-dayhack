@@ -1,22 +1,26 @@
 ﻿@page "/tickets/add"
+@using System.ComponentModel.DataAnnotations
+@using Microsoft.AspNetCore.Components.Forms
 @inject TitanHelpDesk.Data.ApplicationDbContext Db
 @inject NavigationManager Nav
-
+@inject TitanHelpDesk.Services.AlertService Alerts
 
 <h3>New Ticket</h3>
 
-<EditForm Model="model" OnValidSubmit="SaveAsync">
+<EditForm EditContext="editContext" OnValidSubmit="SaveAsync">
     <DataAnnotationsValidator />
     <ValidationSummary />
 
     <div class="mb-3">
         <label class="form-label">Name</label>
         <InputText class="form-control" @bind-Value="model.Name" />
+        <ValidationMessage For="@(() => model.Name)" />
     </div>
 
     <div class="mb-3">
         <label class="form-label">Problem Description</label>
         <InputTextArea class="form-control" rows="5" @bind-Value="model.ProblemDescription" />
+        <ValidationMessage For="@(() => model.ProblemDescription)" />
     </div>
 
     <div class="mb-3">
@@ -51,11 +55,46 @@
         Priority = PriorityLevel.Low
     };
 
+    private EditContext? editContext;
+    private ValidationMessageStore? messageStore;
+
+    protected override void OnInitialized()
+    {
+        editContext = new EditContext(model);
+        messageStore = new ValidationMessageStore(editContext);
+    }
+
     private async Task SaveAsync()
     {
-        Db.Tickets.Add(model);
-        await Db.SaveChangesAsync();
-        Nav.NavigateTo("/tickets");
+        // Server-side revalidation
+        messageStore!.Clear();
+        var ctx = new ValidationContext(model);
+        var results = new List<ValidationResult>();
+        var ok = Validator.TryValidateObject(model, ctx, results, true);
 
+        if (!ok)
+        {
+            foreach (var r in results)
+            {
+                var members = r.MemberNames?.Any() == true ? r.MemberNames : new[] { string.Empty };
+                foreach (var m in members)
+                    messageStore.Add(new FieldIdentifier(model, m), r.ErrorMessage ?? "Invalid");
+            }
+            editContext!.NotifyValidationStateChanged();
+            Alerts.Error("Please fix the highlighted errors.");
+            return;
+        }
+
+        try
+        {
+            Db.Tickets.Add(model);
+            await Db.SaveChangesAsync();
+            Alerts.Success("Ticket created successfully.");
+            Nav.NavigateTo("/tickets");
+        }
+        catch (Exception)
+        {
+            Alerts.Error("An error occurred while saving. Please try again.");
+        }
     }
 }
