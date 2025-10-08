@@ -5,6 +5,8 @@ VisualStudioVersion = 17.14.36414.22
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TitanHelpDesk", "TitanHelpDesk.csproj", "{22427AA9-E0BD-4F8D-BE0B-FE5BBF83C524}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TitanHelpDesk.Tests", "..\TitanHelpDesk.Tests\TitanHelpDesk.Tests.csproj", "{DBE00394-B119-4D4A-8267-F9B522EEA546}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{22427AA9-E0BD-4F8D-BE0B-FE5BBF83C524}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{22427AA9-E0BD-4F8D-BE0B-FE5BBF83C524}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{22427AA9-E0BD-4F8D-BE0B-FE5BBF83C524}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DBE00394-B119-4D4A-8267-F9B522EEA546}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DBE00394-B119-4D4A-8267-F9B522EEA546}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DBE00394-B119-4D4A-8267-F9B522EEA546}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DBE00394-B119-4D4A-8267-F9B522EEA546}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

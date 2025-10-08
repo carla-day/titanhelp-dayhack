@@ -1,0 +1,34 @@
+﻿@inherits LayoutComponentBase
+
+@if (!string.IsNullOrEmpty(CurrentMessage))
+{
+    <div class="alert @AlertClass alert-dismissible fade show mt-3" role="alert">
+        @CurrentMessage
+        <button type="button" class="btn-close" aria-label="Close" @onclick="Clear"></button>
+    </div>
+}
+
+@code {
+    [Parameter] public string? CurrentMessage { get; set; }
+    [Parameter] public string AlertClass { get; set; } = "alert-info";
+
+    public void Show(string message, string type = "info")
+    {
+        CurrentMessage = message;
+        AlertClass = type switch
+        {
+            "success" => "alert-success",
+            "error" => "alert-danger",
+            "warning" => "alert-warning",
+            _ => "alert-info"
+        };
+
+        StateHasChanged();
+    }
+
+    private void Clear()
+    {
+        CurrentMessage = null;
+        StateHasChanged();
+    }
+}
